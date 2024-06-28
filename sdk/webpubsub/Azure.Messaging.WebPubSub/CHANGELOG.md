@@ -4,7 +4,9 @@
 
 ### Features Added
 
-- Added method overloads `serviceClient.GetClientAccessUri`, `serviceClient.GetClientAccessUri` for MQTT clients.
+- Upgraded latest REST API version to 2024-01-01.
+- Added method overloads `serviceClient.GetClientAccessUri`, `serviceClient.GetClientAccessUriasync` for MQTT clients.
+- Added method overloads to support specifying message time-to-live when sending messages.
 - 
 ### Breaking Changes
 

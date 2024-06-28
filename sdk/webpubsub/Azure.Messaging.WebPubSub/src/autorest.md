@@ -32,36 +32,33 @@ directive:
   transform: return "string";
 ```
 
-### Remove Operations AddConnectionsToGroupsAsync and RemoveConnectionsFromGroups. Add them back if required.
+
+### AddConnectionsToGroupsAsyncImpl
 ``` yaml
 directive:
-- remove-operation: WebPubSub_AddConnectionsToGroups
-- remove-operation: WebPubSub_RemoveConnectionsFromGroups
+- from: swagger-document
+  where: $.paths["/api/hubs/{hub}/:addToGroups"].post.operationId
+  transform: return "WebPubSubService_AddConnectionsToGroups";
+- from: swagger-document
+  where: $.paths["/api/hubs/{hub}/:addToGroups"].post.parameters["0"]
+  transform: $["x-ms-parameter-location"] = "client"
+- from: swagger-document
+  where: $.paths["/api/hubs/{hub}/:addToGroups"].post
+  transform: $["x-accessibility"] = "internal"
 ```
 
-### Remove "messageTtlSeconds" parameter from all operations as it introduces breaking change.
+### RemoveConnectionsFromGroups
 ``` yaml
 directive:
-- where-operation: WebPubSub_SendToConnection
-  remove-parameter:
-    debug: true
-    in: query
-    name: messageTtlSeconds
-- where-operation: WebPubSub_SendToGroup
-  remove-parameter:
-    debug: true
-    in: query
-    name: messageTtlSeconds
-- where-operation: WebPubSub_SendToUser
-  remove-parameter:
-    debug: true
-    in: query
-    name: messageTtlSeconds
-- where-operation: WebPubSub_SendToAll
-  remove-parameter:
-    debug: true
-    in: query
-    name: messageTtlSeconds
+- from: swagger-document
+  where: $.paths["/api/hubs/{hub}/:removeFromGroups"].post.operationId
+  transform: return "WebPubSubService_RemoveConnectionsFromGroups";
+- from: swagger-document
+  where: $.paths["/api/hubs/{hub}/:removeFromGroups"].post.parameters["0"]
+  transform: $["x-ms-parameter-location"] = "client"
+- from: swagger-document
+  where: $.paths["/api/hubs/{hub}/:removeFromGroups"].post
+  transform: $["x-accessibility"] = "internal"
 ```
 
 ### GenerateClientTokenImpl

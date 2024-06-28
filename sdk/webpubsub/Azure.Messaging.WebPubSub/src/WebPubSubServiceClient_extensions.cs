@@ -18,7 +18,7 @@ namespace Azure.Messaging.WebPubSub
     [CodeGenSuppress("SendToConnection", typeof(string), typeof(RequestContent), typeof(RequestContext))]
     [CodeGenSuppress("SendToConnectionAsync", typeof(string), typeof(RequestContent), typeof(RequestContext))]
     [CodeGenSuppress("SendToGroup", typeof(string), typeof(RequestContent), typeof(IEnumerable<string>), typeof(RequestContext))]
-    [CodeGenSuppress("SendToGroupAsync", typeof(string),  typeof(RequestContent), typeof(IEnumerable<string>), typeof(RequestContext))]
+    [CodeGenSuppress("SendToGroupAsync", typeof(string), typeof(RequestContent), typeof(IEnumerable<string>), typeof(RequestContext))]
     [CodeGenSuppress("SendToUser", typeof(string), typeof(RequestContent), typeof(RequestContext))]
     [CodeGenSuppress("SendToUserAsync", typeof(string), typeof(RequestContent), typeof(RequestContext))]
     [CodeGenSuppress("AddUserToGroup", typeof(string), typeof(string), typeof(RequestContext))]
@@ -172,7 +172,8 @@ namespace Azure.Messaging.WebPubSub
         {
             Argument.AssertNotNull(content, nameof(content));
 
-            if (contentType == default) contentType = ContentType.TextPlain;
+            if (contentType == default)
+                contentType = ContentType.TextPlain;
 
             return await SendToAllAsync(RequestContent.Create(content), contentType.ToString(), default, context: default).ConfigureAwait(false);
         }
@@ -185,7 +186,8 @@ namespace Azure.Messaging.WebPubSub
         {
             Argument.AssertNotNull(content, nameof(content));
 
-            if (contentType == default) contentType = ContentType.TextPlain;
+            if (contentType == default)
+                contentType = ContentType.TextPlain;
 
             return SendToAll(RequestContent.Create(content), contentType, excluded: default, context: default);
         }
@@ -202,7 +204,8 @@ namespace Azure.Messaging.WebPubSub
             Argument.AssertNotNull(userId, nameof(userId));
             Argument.AssertNotNull(content, nameof(content));
 
-            if (contentType == default) contentType = ContentType.TextPlain;
+            if (contentType == default)
+                contentType = ContentType.TextPlain;
 
             return await SendToUserAsync(userId, RequestContent.Create(content), contentType, context: default).ConfigureAwait(false);
         }
@@ -219,7 +222,8 @@ namespace Azure.Messaging.WebPubSub
             Argument.AssertNotNull(userId, nameof(userId));
             Argument.AssertNotNull(content, nameof(content));
 
-            if (contentType == default) contentType = ContentType.TextPlain;
+            if (contentType == default)
+                contentType = ContentType.TextPlain;
 
             return SendToUser(userId, RequestContent.Create(content), contentType, context: default);
         }
@@ -236,7 +240,8 @@ namespace Azure.Messaging.WebPubSub
             Argument.AssertNotNull(connectionId, nameof(connectionId));
             Argument.AssertNotNull(content, nameof(content));
 
-            if (contentType == default) contentType = ContentType.TextPlain;
+            if (contentType == default)
+                contentType = ContentType.TextPlain;
 
             return await SendToConnectionAsync(connectionId, RequestContent.Create(content), contentType, context: default).ConfigureAwait(false);
         }
@@ -253,7 +258,8 @@ namespace Azure.Messaging.WebPubSub
             Argument.AssertNotNull(connectionId, nameof(connectionId));
             Argument.AssertNotNull(content, nameof(content));
 
-            if (contentType == default) contentType = ContentType.TextPlain;
+            if (contentType == default)
+                contentType = ContentType.TextPlain;
 
             return SendToConnection(connectionId, RequestContent.Create(content), contentType, context: default);
         }
@@ -270,9 +276,10 @@ namespace Azure.Messaging.WebPubSub
             Argument.AssertNotNull(group, nameof(group));
             Argument.AssertNotNull(content, nameof(content));
 
-            if (contentType == default) contentType = ContentType.TextPlain;
+            if (contentType == default)
+                contentType = ContentType.TextPlain;
 
-            return await SendToGroupAsync(group, RequestContent.Create(content), contentType, excluded : default, context: default).ConfigureAwait(false);
+            return await SendToGroupAsync(group, RequestContent.Create(content), contentType, excluded: default, context: default).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -287,7 +294,8 @@ namespace Azure.Messaging.WebPubSub
             Argument.AssertNotNull(group, nameof(group));
             Argument.AssertNotNull(content, nameof(content));
 
-            if (contentType == default) contentType = ContentType.TextPlain;
+            if (contentType == default)
+                contentType = ContentType.TextPlain;
 
             return SendToGroup(group, RequestContent.Create(content), contentType, excluded: default, context: default);
         }
