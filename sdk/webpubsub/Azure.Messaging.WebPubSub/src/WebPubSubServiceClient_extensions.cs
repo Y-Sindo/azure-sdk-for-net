@@ -567,7 +567,7 @@ namespace Azure.Messaging.WebPubSub
         /// <param name="groups"> A list of groups which target connections will be added into. </param>
         /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <returns>A <see cref="Response"/> if successful.</returns>
-        public virtual Response AddConnectionsToGroups(string filter, string[] groups, RequestContext context = null)
+        public virtual Response AddConnectionsToGroups(string filter, IEnumerable<string> groups, RequestContext context = null)
         {
             Argument.AssertNotNull(filter, nameof(filter));
             Argument.AssertNotNull(groups, nameof(groups));
@@ -584,7 +584,7 @@ namespace Azure.Messaging.WebPubSub
         /// <param name="groups"> A list of groups which target connections will be added into. </param>
         /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <returns>A <see cref="Response"/> if successful.</returns>
-        public virtual async Task<Response> AddConnectionsToGroupsAsync(string filter, string[] groups, RequestContext context = null)
+        public virtual async Task<Response> AddConnectionsToGroupsAsync(string filter, IEnumerable<string> groups, RequestContext context = null)
         {
             Argument.AssertNotNull(filter, nameof(filter));
             Argument.AssertNotNull(groups, nameof(groups));
@@ -601,7 +601,7 @@ namespace Azure.Messaging.WebPubSub
         /// <param name="groups"> A list of groups which target connections will be added into. </param>
         /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <returns>A <see cref="Response"/> if successful.</returns>
-        public virtual Response RemoveConnectionsFromGroups(string filter, string[] groups, RequestContext context = null)
+        public virtual Response RemoveConnectionsFromGroups(string filter, IEnumerable<string> groups, RequestContext context = null)
         {
             Argument.AssertNotNull(filter, nameof(filter));
             Argument.AssertNotNull(groups, nameof(groups));
@@ -618,7 +618,7 @@ namespace Azure.Messaging.WebPubSub
         /// <param name="groups"> A list of groups which target connections will be added into. </param>
         /// <param name="context"> The request context, which can override default behaviors of the client pipeline on a per-call basis. </param>
         /// <returns>A <see cref="Response"/> if successful.</returns>
-        public virtual async Task<Response> RemoveConnectionsFromGroupsAsync(string filter, string[] groups, RequestContext context = null)
+        public virtual async Task<Response> RemoveConnectionsFromGroupsAsync(string filter, IEnumerable<string> groups, RequestContext context = null)
         {
             Argument.AssertNotNull(filter, nameof(filter));
             Argument.AssertNotNull(groups, nameof(groups));
