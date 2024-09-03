@@ -74,9 +74,10 @@ namespace Microsoft.Azure.WebPubSub.AspNetCore
             }
             #endregion
 
+            WebPubSubEventRequest serviceRequest = null;
             try
             {
-                var serviceRequest = await request.ReadWebPubSubEventAsync(_requestValidator, context.RequestAborted).ConfigureAwait(false);
+                serviceRequest = await request.ReadWebPubSubEventAsync(_requestValidator, context.RequestAborted).ConfigureAwait(false);
                 Log.StartToHandleRequest(_logger, serviceRequest.ConnectionContext);
 
                 switch (serviceRequest)
@@ -139,14 +140,46 @@ namespace Microsoft.Azure.WebPubSub.AspNetCore
             {
                 Log.FailedToHandleRequest(_logger, ex.Message, ex);
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                await context.Response.WriteAsync(ex.Message).ConfigureAwait(false);
+                string responseBodyString;
+                if (serviceRequest is MqttConnectEventRequest mqttConnect)
+                {
+                    var responseBody = mqttConnect.Mqtt.ProtocolVersion switch
+                    {
+                        MqttProtocolVersion.V311 => mqttConnect.CreateMqttV311ErrorResponse(MqttV311ConnectReturnCode.NotAuthorized, ex.Message),
+                        MqttProtocolVersion.V500 => mqttConnect.CreateMqttV50ErrorResponse(MqttV500ConnectReasonCode.NotAuthorized),
+                        // Should not reach here.
+                        _ => throw new NotSupportedException($"MQTT protocol version {mqttConnect.Mqtt.ProtocolVersion} is not supported.")
+                    };
+                    responseBodyString = JsonSerializer.Serialize(responseBody);
+                }
+                else
+                {
+                    responseBodyString = ex.Message;
+                }
+                await context.Response.WriteAsync(responseBodyString).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 Log.FailedToHandleRequest(_logger, ex.Message, ex);
                 // logging to service.
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                await context.Response.WriteAsync(ex.Message).ConfigureAwait(false);
+                string responseBodyString;
+                if (serviceRequest is MqttConnectEventRequest mqttConnect)
+                {
+                    var responseBody = mqttConnect.Mqtt.ProtocolVersion switch
+                    {
+                        MqttProtocolVersion.V311 => mqttConnect.CreateMqttV311ErrorResponse(MqttV311ConnectReturnCode.ServerUnavailable, ex.Message),
+                        MqttProtocolVersion.V500 => mqttConnect.CreateMqttV50ErrorResponse(MqttV500ConnectReasonCode.ServerUnavailable),
+                        // Should not reach here.
+                        _ => throw new NotSupportedException($"MQTT protocol version {mqttConnect.Mqtt.ProtocolVersion} is not supported.")
+                    };
+                    responseBodyString = JsonSerializer.Serialize(responseBody);
+                }
+                else
+                {
+                    responseBodyString = ex.Message;
+                }
+                await context.Response.WriteAsync(responseBodyString).ConfigureAwait(false);
             }
         }
 

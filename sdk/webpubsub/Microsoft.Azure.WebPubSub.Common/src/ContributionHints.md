@@ -6,6 +6,8 @@ This file provides some hints for contributing to the Microsoft.Azure.WebPubSub.
 
 The main purpose of this project is to provide classes for JSON serialization and deserialization to the Azure Functions extensions and the `AspNetCore` project.
 
+### Azure Functions Extensions
+The following diagram shows the process of JSON serialization and deserialization in the Azure Functions extensions.
 ```mermaid
 sequenceDiagram
     participant W as Web PubSub Service
@@ -26,3 +28,7 @@ sequenceDiagram
 ```
 
 Currently all the classes for CloudEvents requests have customized JSON converters or customized deserialization classes. This is because in .NET framework, `System.Text.Json` cannot support deserialization of classes without a pameterless constructor. Therefore we need to customize the deserialization of these classes.
+
+### `AspNetCore` project
+The following diagram shows the process of JSON serialization and deserialization in the `AspNetCore` project.
+```mermaid

@@ -63,8 +63,16 @@ namespace Microsoft.Azure.WebPubSub.AspNetCore
                 case RequestType.Connect:
                     {
                         var content = await new StreamReader(request.Body).ReadToEndAsync().ConfigureAwait(false);
-                        var eventRequest = JsonSerializer.Deserialize<ConnectEventRequest>(content);
-                        return new ConnectEventRequest(context, eventRequest.Claims, eventRequest.Query, eventRequest.Subprotocols, eventRequest.ClientCertificates, eventRequest.Headers);
+                        if (context is MqttConnectionContext mqttContext)
+                        {
+                            var requestBody = JsonSerializer.Deserialize<MqttConnectEventRequestContent>(content);
+                            return new MqttConnectEventRequest(mqttContext, requestBody.Claims, requestBody.Query, requestBody.ClientCertificates, requestBody.Headers, requestBody.Mqtt);
+                        }
+                        else
+                        {
+                            var eventRequest = JsonSerializer.Deserialize<ConnectEventRequest>(content);
+                            return new ConnectEventRequest(context, eventRequest.Claims, eventRequest.Query, eventRequest.Subprotocols, eventRequest.ClientCertificates, eventRequest.Headers);
+                        }
                     }
                 case RequestType.User:
                     {
@@ -85,8 +93,16 @@ namespace Microsoft.Azure.WebPubSub.AspNetCore
                 case RequestType.Disconnected:
                     {
                         var content = await new StreamReader(request.Body).ReadToEndAsync().ConfigureAwait(false);
-                        var eventRequest = JsonSerializer.Deserialize<DisconnectedEventRequest>(content);
-                        return new DisconnectedEventRequest(context, eventRequest.Reason);
+                        if (context is MqttConnectionContext mqttContext)
+                        {
+                            var requestBody = JsonSerializer.Deserialize<MqttDisconnectedEventRequestContent>(content);
+                            return new MqttDisconnectedEventRequest(mqttContext, requestBody.Reason, requestBody.Mqtt);
+                        }
+                        else
+                        {
+                            var eventRequest = JsonSerializer.Deserialize<DisconnectedEventRequest>(content);
+                            return new DisconnectedEventRequest(context, eventRequest.Reason);
+                        }
                     }
                 default:
                     return null;
