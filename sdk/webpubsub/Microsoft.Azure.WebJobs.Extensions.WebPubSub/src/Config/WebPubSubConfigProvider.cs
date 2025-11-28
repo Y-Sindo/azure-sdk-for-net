@@ -103,14 +103,6 @@ namespace Microsoft.Azure.WebJobs.Extensions.WebPubSub
             return _dispatcher.ExecuteAsync(input, cancellationToken);
         }
 
-        internal WebPubSubService GetService(WebPubSubAttribute attribute)
-        {
-            var client = _clientFactory.Create(
-                attribute.Connection,
-                attribute.Hub);
-            return new WebPubSubService(client);
-        }
-
         private void ValidateWebPubSubAttributeBinding(WebPubSubAttribute attribute, Type type)
         {
             ValidateWebPubSubConnectionCore(attribute.Connection, attribute.Hub, "WebPubSub");
@@ -154,7 +146,7 @@ namespace Microsoft.Azure.WebJobs.Extensions.WebPubSub
 
         private IAsyncCollector<WebPubSubAction> CreateCollector(WebPubSubAttribute attribute)
         {
-            return new WebPubSubAsyncCollector(GetService(attribute));
+            return new WebPubSubAsyncCollector(_clientFactory.Create(attribute.Connection, attribute.Hub));
         }
 
         private WebPubSubConnection GetClientConnection(WebPubSubConnectionAttribute attribute)
@@ -162,8 +154,8 @@ namespace Microsoft.Azure.WebJobs.Extensions.WebPubSub
             var client = _clientFactory.Create(
                 attribute.Connection,
                 attribute.Hub);
-            var service = new WebPubSubService(client);
-            return service.GetClientConnection(attribute.UserId, clientProtocol: attribute.ClientProtocol);
+            var uri = client.GetClientAccessUri(userId: attribute.UserId, clientProtocol: attribute.ClientProtocol);
+            return new WebPubSubConnection(uri);
         }
 
         internal static void RegisterJsonConverter()

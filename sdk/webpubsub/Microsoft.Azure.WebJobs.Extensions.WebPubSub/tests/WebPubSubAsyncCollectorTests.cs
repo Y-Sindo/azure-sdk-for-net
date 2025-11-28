@@ -15,7 +15,7 @@ namespace Microsoft.Azure.WebJobs.Extensions.WebPubSub.Tests
     public class WebPubSubAsyncCollectorTests
     {
         private static readonly Mock<WebPubSubServiceClient> _service = new();
-        private static readonly WebPubSubAsyncCollector _collector = new(new WebPubSubService(_service.Object));
+        private static readonly WebPubSubAsyncCollector _collector = new(_service.Object);
 
         [Test]
         public void NullServiceThrows()

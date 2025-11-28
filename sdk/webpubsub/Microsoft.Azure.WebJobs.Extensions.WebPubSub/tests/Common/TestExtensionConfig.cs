@@ -30,7 +30,7 @@ namespace Microsoft.Azure.WebJobs.Extensions.WebPubSub.Tests
             var service = new Mock<WebPubSubServiceClient>();
             //service.Setup(x => x.SendToAll(It.IsAny<RequestContent>(), It.IsAny<string>(), null, It.IsAny<CancellationToken>()))
             //    .Returns(new MockResponse(200));
-            return new WebPubSubAsyncCollector(new WebPubSubService(service.Object));
+            return new WebPubSubAsyncCollector(service.Object);
         }
 
         [Binding]
